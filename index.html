@@ -211,9 +211,7 @@
     <label><input type="checkbox" id="sound-toggle" checked> Sound</label>
     <label><input type="checkbox" id="fullscreen-toggle" onclick="toggleFullscreen()"> Fullscreen</label>
     <select id="difficulty-select">
-      <option value="10">Level 1</option>
-      <option value="20">Level 2</option>
-      <option value="30">Level 3</option>
+      <option value="sequential">Sequential</option>
       <option value="random" selected>🎲 Random</option>
     </select>
   </div>
@@ -239,18 +237,18 @@
 
   <script>
     const data = [
-      { percent: 150, fraction: "3/2" },
-      { percent: 20, fraction: "1/5" },
-      { percent: 12.5, fraction: "1/8" },
-      { percent: 25, fraction: "1/4" },
-      { percent: 33.3, fraction: "1/3" },
-      { percent: 50, fraction: "1/2" },
-      { percent: 75, fraction: "3/4" },
-      { percent: 66.6, fraction: "2/3" },
-      { percent: 40, fraction: "2/5" },
-      { percent: 60, fraction: "3/5" },
-      { percent: 80, fraction: "4/5" },
-      { percent: 10, fraction: "1/10" }
+        { percent: 10, fraction: "1/10" },
+        { percent: 20, fraction: "1/5" },
+        { percent: 25, fraction: "1/4" },
+        { percent: 33.3, fraction: "1/3" },
+        { percent: 40, fraction: "2/5" },
+        { percent: 50, fraction: "1/2" },
+        { percent: 60, fraction: "3/5" },
+        { percent: 66.6, fraction: "2/3" },
+        { percent: 75, fraction: "3/4" },
+        { percent: 80, fraction: "4/5" },
+        { percent: 12.5, fraction: "1/8" },
+        { percent: 150, fraction: "3/2" }
     ];
 
     let currentIndex = 0, score = 0, total = 0;
@@ -284,16 +282,16 @@
 
     function shuffle(arr){ return arr.sort(()=>Math.random()-0.5); }
 
-    function startGame(){
-      summaryElem.style.display = "none";
-      score = total = 0;
-      incorrect = [];
-      currentIndex = 0;
-      progressBar.value = 0;
-      scoreElem.textContent = "Score: 0";
-      randomMode = document.getElementById("difficulty-select").value === "random";
-      startTimer();
-      nextQuestion();
+    function startGame() {
+        summaryElem.style.display = "none";
+        score = total = index = 0;
+        incorrect = [];
+        progressBar.value = 0;
+        scoreElem.textContent = "Score: 0";
+        mode = document.getElementById("difficulty-select").value;
+        startTimer();
+        if (mode === "random") shuffle(questions);
+        nextQuestion();
     }
 
     function nextQuestion(){
