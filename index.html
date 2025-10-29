@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Percentage-Fraction Practice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="./percent_fraction_icon.png" />
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(to right, #e0f7fa, #fff3e0);
+      --card-bg: #ffffffcc;
+      --text-color: #222;
+      --primary-gradient: linear-gradient(135deg, #42a5f5, #478ed1);
+      --accent-gradient: linear-gradient(135deg, #66bb6a, #43a047);
+      --footer-bg: rgba(0, 0, 0, 0.05);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      padding: 2rem;
+      transition: background 0.5s, color 0.5s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.dark {
+      --bg-gradient: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      --card-bg: #37474fcc;
+      --text-color: #ffffff;
+      --footer-bg: linear-gradient(to right, #37474f, #263238);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      animation: fadeSlideDown 1s ease;
+    }
+
+    .main-title {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: bold;
+      background: linear-gradient(90deg, #2196f3, #9c27b0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+    }
+
+    .tagline {
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      color: #666;
+      animation: fadeIn 2s ease;
+    }
+
+    body.dark .tagline {
+      color: #bbb;
+    }
+
+    #top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      animation: fadeInDown 1s ease;
+    }
+
+    button, select, label {
+      padding: 0.4rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-image: var(--primary-gradient);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    button:hover, select:hover {
+      transform: scale(1.05);
+      background-image: var(--accent-gradient);
+    }
+
+    select {
+      appearance: none;
+      background-image: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    select option {
+      color: #000;
+      background-color: #fff;
+    }
+
+    body.dark select option {
+      color: #fff;
+      background-color: #424242;
+    }
+
+    .section {
+      max-width: 600px;
+      margin: auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      animation: fadeInUp 1s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .question {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .options {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .option-btn {
+      font-size: 1.1rem;
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      border: 2px solid transparent;
+      background: var(--primary-gradient);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option-btn:hover { transform: scale(1.05); }
+
+    .correct { background: #4caf50 !important; color: #fff; }
+    .incorrect { background: #e53935 !important; color: #fff; }
+
+    progress {
+      width: 100%;
+      height: 15px;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #e0e0e0;
+      margin-bottom: 10px;
+    }
+
+    progress::-webkit-progress-value {
+      background-image: linear-gradient(90deg, #00c6ff, #0072ff);
+    }
+
+    .timer {
+      font-size: 1.3rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .summary {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: #fce4ec;
+      border-radius: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
+      animation: fadeInUp 1s ease;
+      color: #000;
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: auto;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1 class="main-title">📊 Percentage–Fraction Practice 📊</h1>
+    <p class="tagline">Convert percentages into fractions – fast and fun!</p>
+  </div>
+
+  <div id="top-controls">
+    <button id="start-button">Start</button>
+    <button id="stop-button">Stop</button>
+    <label><input type="checkbox" id="theme-toggle"> Dark Mode</label>
+    <label><input type="checkbox" id="sound-toggle" checked> Sound</label>
+    <label><input type="checkbox" id="fullscreen-toggle" onclick="toggleFullscreen()"> Fullscreen</label>
+    <select id="difficulty-select">
+      <option value="10">Level 1</option>
+      <option value="20">Level 2</option>
+      <option value="30">Level 3</option>
+      <option value="random" selected>🎲 Random</option>
+    </select>
+  </div>
+
+  <div class="timer" id="timer-display">Time: 00:00</div>
+
+  <div class="section" id="quiz-section">
+    <progress id="progress-bar" value="0" max="10"></progress>
+    <div class="question" id="question">Press Start to begin</div>
+    <div class="options" id="options"></div>
+    <div class="score" id="score">Score: 0</div>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <footer>
+    &copy; 2025 Percentage–Fraction Practice | Made for educational purposes.<br>
+    <p>ramit-kumar-edition</p>
+  </footer>
+
+  <audio id="correct-sound" src="./correct-choice.mp3"></audio>
+  <audio id="incorrect-sound" src="./wrong-answer.wav"></audio>
+
+  <script>
+    const data = [
+      { percent: 150, fraction: "3/2" },
+      { percent: 20, fraction: "1/5" },
+      { percent: 12.5, fraction: "1/8" },
+      { percent: 25, fraction: "1/4" },
+      { percent: 33.3, fraction: "1/3" },
+      { percent: 50, fraction: "1/2" },
+      { percent: 75, fraction: "3/4" },
+      { percent: 66.6, fraction: "2/3" },
+      { percent: 40, fraction: "2/5" },
+      { percent: 60, fraction: "3/5" },
+      { percent: 80, fraction: "4/5" },
+      { percent: 10, fraction: "1/10" }
+    ];
+
+    let currentIndex = 0, score = 0, total = 0;
+    let timer = 0, timerInterval;
+    let randomMode = true;
+    let incorrect = [];
+
+    const qElem = document.getElementById("question");
+    const optsElem = document.getElementById("options");
+    const scoreElem = document.getElementById("score");
+    const summaryElem = document.getElementById("summary");
+    const timerElem = document.getElementById("timer-display");
+    const correctSound = document.getElementById("correct-sound");
+    const wrongSound = document.getElementById("incorrect-sound");
+    const progressBar = document.getElementById("progress-bar");
+
+    function formatTime(t) {
+      const m = String(Math.floor(t/60)).padStart(2,'0');
+      const s = String(t%60).padStart(2,'0');
+      return `${m}:${s}`;
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timer = 0;
+      timerInterval = setInterval(()=>{
+        timer++;
+        timerElem.textContent = `Time: ${formatTime(timer)}`;
+      },1000);
+    }
+
+    function shuffle(arr){ return arr.sort(()=>Math.random()-0.5); }
+
+    function startGame(){
+      summaryElem.style.display = "none";
+      score = total = 0;
+      incorrect = [];
+      currentIndex = 0;
+      progressBar.value = 0;
+      scoreElem.textContent = "Score: 0";
+      randomMode = document.getElementById("difficulty-select").value === "random";
+      startTimer();
+      nextQuestion();
+    }
+
+    function nextQuestion(){
+      optsElem.innerHTML = "";
+      if(currentIndex >= data.length){
+        endGame();
+        return;
+      }
+
+      const q = randomMode ? data[Math.floor(Math.random()*data.length)] : data[currentIndex];
+      const correct = q.fraction;
+      const options = [correct];
+      while(options.length < 4){
+        const r = data[Math.floor(Math.random()*data.length)].fraction;
+        if(!options.includes(r)) options.push(r);
+      }
+      shuffle(options);
+
+      qElem.textContent = `What is the fraction value of ${q.percent}% ?`;
+
+      options.forEach(opt=>{
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.textContent = opt;
+        btn.onclick = ()=>handleAnswer(btn,opt,correct,q);
+        optsElem.appendChild(btn);
+      });
+      progressBar.value = ++total;
+    }
+
+    function handleAnswer(btn,selected,correct,q){
+      const buttons = document.querySelectorAll(".option-btn");
+      buttons.forEach(b=>b.disabled=true);
+      if(selected===correct){
+        btn.classList.add("correct");
+        score++;
+        if(document.getElementById("sound-toggle").checked) correctSound.play();
+      }else{
+        btn.classList.add("incorrect");
+        if(document.getElementById("sound-toggle").checked) wrongSound.play();
+        incorrect.push({question:`${q.percent}%`,correct,selected});
+        buttons.forEach(b=>{if(b.textContent===correct)b.classList.add("correct");});
+      }
+      scoreElem.textContent = `Score: ${score}`;
+      currentIndex++;
+      setTimeout(nextQuestion,1200);
+    }
+
+    function endGame(){
+      clearInterval(timerInterval);
+      qElem.textContent = "🎉 Finished!";
+      optsElem.innerHTML = "";
+      summaryElem.style.display = "block";
+      const acc = Math.round((score/total)*100);
+      const mistakeList = incorrect.map(i=>`<li>${i.question} → Correct: <strong>${i.correct}</strong> (You chose: ${i.selected})</li>`).join('');
+      summaryElem.innerHTML = `
+        <h2>Game Summary</h2>
+        <p>✔ Correct: ${score} ❌ Incorrect: ${total - score}<br>Accuracy: ${acc}%</p>
+        ${mistakeList ? `<details><summary>Incorrect Answers</summary><ul>${mistakeList}</ul></details>` : ''}
+        <p>Time Taken: ${formatTime(timer)}</p>
+      `;
+    }
+
+    document.getElementById("start-button").onclick = startGame;
+    document.getElementById("stop-button").onclick = ()=>{
+      clearInterval(timerInterval);
+      qElem.textContent = "Game stopped.";
+      optsElem.innerHTML = "";
+    };
+    document.getElementById("theme-toggle").onchange = (e)=>{
+      document.body.classList.toggle("dark", e.target.checked);
+    };
+
+    function toggleFullscreen(){
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }
+  </script>
+</body>
+</html>
