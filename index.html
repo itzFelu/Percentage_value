@@ -371,6 +371,28 @@
       if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
       else { document.exitFullscreen(); }
     }
+
+    // 🔥 Keyboard Shortcuts
+    document.addEventListener("keydown",e=>{
+      if(e.target.tagName==="INPUT"||e.target.tagName==="SELECT")return;
+      switch(e.key.toLowerCase()){
+        case "s": document.getElementById("start-button").click(); break;
+        case "a":
+        case "q": document.getElementById("stop-button").click(); break;
+        case "d":
+          const dark=document.getElementById("theme-toggle");
+          dark.checked=!dark.checked; dark.dispatchEvent(new Event("change"));
+          break;
+        case "m":
+          const snd=document.getElementById("sound-toggle");
+          snd.checked=!snd.checked; break;
+        case "f": toggleFullscreen(); break;
+        case "l":
+          const modeSel=document.getElementById("mode-select");
+          modeSel.value=(modeSel.value==="random"?"sequential":"random");
+          break;
+      }
+    });
   </script>
 </body>
 </html>
