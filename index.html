@@ -178,7 +178,9 @@
       color: #000;
       display: none;
     }
-
+    summary:hover{
+        cursor: pointer;
+    }
     footer {
       text-align: center;
       padding: 1rem 0;
@@ -211,8 +213,12 @@
     <label><input type="checkbox" id="sound-toggle" checked> Sound</label>
     <label><input type="checkbox" id="fullscreen-toggle" onclick="toggleFullscreen()"> Fullscreen</label>
     <select id="difficulty-select">
-      <option value="sequential">Sequential</option>
-      <option value="random" selected>🎲 Random</option>
+        <option value="basic">Basic (Sequential)</option>
+        <option value="intermediate">Intermediate (Sequential)</option>
+        <option value="all">All (Sequential)</option>
+        <option value="rand-basic">🎲 Random Basic</option>
+        <option value="rand-intermediate">🎲 Random Intermediate</option>
+        <option value="rand-all" selected>🎲 Random All</option>
     </select>
   </div>
 
@@ -228,7 +234,7 @@
   <div class="summary" id="summary"></div>
 
   <footer>
-    &copy; 2025 Percentage–Fraction Practice | Made for educational purposes.<br>
+    &copy; 2025 Percentage-Fraction Practice | Made for educational purposes.<br>
     <p>ramit-kumar-edition</p>
   </footer>
 
@@ -236,60 +242,76 @@
   <audio id="incorrect-sound" src="./wrong-answer.wav"></audio>
 
   <script>
-    const data = [
-        // 🔹 Basic fractions with clear decimal patterns
-        { percent: 4, fraction: "1/25" },
-        { percent: 5, fraction: "1/20" },
-        { percent: 6.25, fraction: "1/16" },
-        { percent: "6(2/3)", fraction: "1/15" },
-        { percent: "7(1/7)", fraction: "1/14" },
-        { percent: "7(9/13)", fraction: "1/13" },
-        { percent: "8(1/3)", fraction: "1/12" },
-        { percent: 9.09, fraction: "1/11" },
-        { percent: "11(1/9)", fraction: "1/9" },
-        { percent: 12.5, fraction: "1/8" },
-        { percent: "14(2/7)", fraction: "1/7" },
-        { percent: "16(2/3)", fraction: "1/6" },
-        { percent: 20, fraction: "1/5" },
-        { percent: 25, fraction: "1/4" },
-        { percent: "27.27", fraction: "3/11" },
-        { percent: "28(4/7)", fraction: "2/7" },
-        { percent: "33(1/3)", fraction: "1/3" },
-        { percent: "35", fraction: "7/20" },
-        { percent: "36.36", fraction: "4/11" },
-        { percent: 37.5, fraction: "3/8" },
-        { percent: 40, fraction: "2/5" },
-        { percent: "42(6/7)", fraction: "3/7" },
-        { percent: "44(4/9)", fraction: "4/9" },
-        { percent: 45, fraction: "9/20" },
-        { percent: "45.45", fraction: "5/11" },
-        { percent: "55", fraction: "11/20" },
-        { percent: "55(5/9)", fraction: "5/9" },
-        { percent: "57(1/7)", fraction: "4/7" },
-        { percent: "60", fraction: "3/5" },
-        { percent: "62.5", fraction: "5/8" },
-        { percent: "66(2/3)", fraction: "2/3" },
-        { percent: "71(3/7)", fraction: "5/7" },
-        { percent: "75", fraction: "3/4" },
-        { percent: "80", fraction: "4/5" },
-        { percent: "83(1/3)", fraction: "5/6" },
-        { percent: "100", fraction: "1/1" },
-        { percent: "120", fraction: "6/5" },
-        { percent: "125", fraction: "5/4" },
-        { percent: "150", fraction: "3/2" },
-
-        // 🔹 Intermediate practice patterns
-        { percent: "15", fraction: "3/20" },
-        { percent: "22(2/9)", fraction: "2/9" },
-        { percent: "24", fraction: "6/25" },
-        { percent: "16", fraction: "4/25" },
-        { percent: "12", fraction: "3/25" },
-        { percent: "8", fraction: "2/25" },
-        { percent: "18.18", fraction: "2/11" },
-        { percent: "5(15/17)", fraction: "1/17" },
-        { percent: "5(5/9)", fraction: "1/18" },
-        { percent: "5(5/19)", fraction: "1/19" },
+    // =================== QUESTION BANK ===================
+    const basicSet = [
+    { percent: 4, fraction: "1/25" },
+    { percent: 5, fraction: "1/20" },
+    { percent: 6.25, fraction: "1/16" },
+    { percent: "6(2/3)", fraction: "1/15" },
+    { percent: "7(1/7)", fraction: "1/14" },
+    { percent: "8(1/3)", fraction: "1/12" },
+    { percent: 9.09, fraction: "1/11" },
+    { percent: "11(1/9)", fraction: "1/9" },
+    { percent: 12.5, fraction: "1/8" },
+    { percent: "14(2/7)", fraction: "1/7" },
+    { percent: "16(2/3)", fraction: "1/6" },
+    { percent: 20, fraction: "1/5" },
+    { percent: 25, fraction: "1/4" },
+    { percent: "33(1/3)", fraction: "1/3" },
+    { percent: 37.5, fraction: "3/8" },
+    { percent: 40, fraction: "2/5" },
+    { percent: 50, fraction: "1/2" },
+    { percent: 60, fraction: "3/5" },
+    { percent: 66.6, fraction: "2/3" },
+    { percent: 75, fraction: "3/4" },
+    { percent: 80, fraction: "4/5" },
+    { percent: 100, fraction: "1/1" }
     ];
+
+    const intermediateSet = [
+    { percent: "22(2/9)", fraction: "2/9" },
+    { percent: "24", fraction: "6/25" },
+    { percent: "28(4/7)", fraction: "2/7" },
+    { percent: "27.27", fraction: "3/11" },
+    { percent: "35", fraction: "7/20" },
+    { percent: "36.36", fraction: "4/11" },
+    { percent: "42(6/7)", fraction: "3/7" },
+    { percent: "44(4/9)", fraction: "4/9" },
+    { percent: "45.45", fraction: "5/11" },
+    { percent: "55(5/9)", fraction: "5/9" },
+    { percent: "55", fraction: "11/20" },
+    { percent: "57(1/7)", fraction: "4/7" },
+    { percent: "62.5", fraction: "5/8" },
+    { percent: "71(3/7)", fraction: "5/7" },
+    { percent: "83(1/3)", fraction: "5/6" },
+    { percent: "120", fraction: "6/5" },
+    { percent: "125", fraction: "5/4" },
+    { percent: "150", fraction: "3/2" },
+    { percent: "5(15/17)", fraction: "1/17" },
+    { percent: "5(5/9)", fraction: "1/18" },
+    { percent: "5(5/19)", fraction: "1/19" },
+    { percent: "18.18", fraction: "2/11" },
+    { percent: "15", fraction: "3/20" },
+    { percent: "8", fraction: "2/25" },
+    { percent: "12", fraction: "3/25" },
+    { percent: "16", fraction: "4/25" }
+    ];
+
+    const allSet = [...basicSet, ...intermediateSet];
+
+    // =================== MODE SETUP ===================
+    let data = [];
+    function setModeQuestions(mode) {
+        switch (mode) {
+            case "basic": data = [...basicSet]; break;
+            case "intermediate": data = [...intermediateSet]; break;
+            case "all": data = [...allSet]; break;
+            case "rand-basic": data = shuffle([...basicSet]); break;
+            case "rand-intermediate": data = shuffle([...intermediateSet]); break;
+            case "rand-all": data = shuffle([...allSet]); break;
+        }
+    }
+
 
     let currentIndex = 0, score = 0, total = 0;
     let timer = 0, timerInterval;
@@ -324,13 +346,13 @@
 
     function startGame() {
         summaryElem.style.display = "none";
-        score = total = index = 0;
+        score = total = currentIndex = 0;
         incorrect = [];
         progressBar.value = 0;
         scoreElem.textContent = "Score: 0";
         mode = document.getElementById("difficulty-select").value;
         startTimer();
-        if (mode === "random") shuffle(questions);
+        setModeQuestions(mode);
         nextQuestion();
     }
 
@@ -341,7 +363,7 @@
         return;
       }
 
-      const q = randomMode ? data[Math.floor(Math.random()*data.length)] : data[currentIndex];
+      const q = data[currentIndex];
       const correct = q.fraction;
       const options = [correct];
       while(options.length < 4){
@@ -389,8 +411,8 @@
       const mistakeList = incorrect.map(i=>`<li>${i.question} → Correct: <strong>${i.correct}</strong> (You chose: ${i.selected})</li>`).join('');
       summaryElem.innerHTML = `
         <h2>Game Summary</h2>
-        <p>✔ Correct: ${score} ❌ Incorrect: ${total - score}<br>Accuracy: ${acc}%</p>
-        ${mistakeList ? `<details><summary>Incorrect Answers</summary><ul>${mistakeList}</ul></details>` : ''}
+        <p><span style="color: green;">✔ Correct:</span> ${score} <span style="color: red;">❌ Incorrect:</span> ${total - score}<br>Accuracy: ${acc}%</p>
+        ${mistakeList ? `<details><summary style="color: gray;">Show Incorrect Answers</summary><ul>${mistakeList}</ul></details>` : ''}
         <p>Time Taken: ${formatTime(timer)}</p>
       `;
     }
@@ -418,17 +440,22 @@
         case "a":
         case "q": document.getElementById("stop-button").click(); break;
         case "d":
-          const dark=document.getElementById("theme-toggle");
-          dark.checked=!dark.checked; dark.dispatchEvent(new Event("change"));
-          break;
+            const dark=document.getElementById("theme-toggle");
+            dark.checked=!dark.checked; dark.dispatchEvent(new Event("change"));
+            break;
         case "m":
-          const snd=document.getElementById("sound-toggle");
-          snd.checked=!snd.checked; break;
+            const snd=document.getElementById("sound-toggle");
+            snd.checked=!snd.checked; break;
         case "f": toggleFullscreen(); break;
         case "l":
-          const modeSel=document.getElementById("mode-select");
-          modeSel.value=(modeSel.value==="random"?"sequential":"random");
-          break;
+            const modeSel = document.getElementById("difficulty-select");
+            const opts = Array.from(modeSel.options);
+            const currentIndex = opts.findIndex(o => o.value === modeSel.value);
+            const nextIndex = (currentIndex + 1) % opts.length;
+            modeSel.value = opts[nextIndex].value;
+            // Optional: visually confirm mode change (for user feedback)
+            qElem.textContent = `🔄 Mode changed to: ${modeSel.options[nextIndex].text}`;
+            break;
       }
     });
   </script>
